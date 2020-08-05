@@ -1,0 +1,63 @@
+"""
+digipen
+
+Description:
+"""
+
+# Setup
+import random
+import pygame
+pygame.init()
+
+# Encoding a message
+LETTERS_CAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+letters_lower = "abcdefghijklmnopqrstuvwxyz"
+final_message = ""
+message_to_encode = input("Please enter a message to encode: ")
+print()
+num = random.randint(1, 25)
+for character in message_to_encode:
+    if character in LETTERS_CAP:
+        index1 = LETTERS_CAP.index(character)
+        index1 += int(num)
+        if index1 > 25:
+            index1 -= 26
+        final_message += LETTERS_CAP[index1]
+    elif character in letters_lower:
+        index2 = letters_lower.index(character)
+        index2 += int(num)
+        if index2 > 25:
+            index2 -= 26
+        final_message += letters_lower[index2]
+    else:
+        final_message += character
+print("Here is your encoded message: " + final_message)
+print()
+print("To decode this message, you will need a key, which is a number. Here is your key: " + str(num))
+print()
+
+# Decoding a message
+LETTERS_CAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+letters_lower = "abcdefghijklmnopqrstuvwxyz"
+final_message = ""
+message_to_decode = input("Please enter a message to decode: ")
+print()
+num = input("Please enter your decoding key: ")
+print()
+for character in message_to_decode:
+    if character in LETTERS_CAP:
+        index1 = LETTERS_CAP.index(character)
+        index1 -= int(num)
+        if index1 < 0:
+            index1 += 26
+        final_message += LETTERS_CAP[index1]
+    elif character in letters_lower:
+        index2 = letters_lower.index(character)
+        index2 -= int(num)
+        if index2 < 0:
+            index2 += 26
+        final_message += letters_lower[index2]
+    else:
+        final_message += character
+print("Here is your decoded message: " + final_message)
+    
