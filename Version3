@@ -44,18 +44,11 @@ final_message = ""
 message_to_decode = input("Please enter a message to decode: ")
 print()
 num = input("Please enter your decoding key: ")
+print()
 # Check if key is integer
-"""while num_is_int == False:
-    try:
-        num = int(num)
-        num_is_int = True
-        print()
-    except ValueError:
-        print()
-        print("Please enter an integer for your decoding key.")
-        print()
-        num = input("Please enter your decoding key: ")
-        print()"""
+while not num.isdigit():
+    num = input("Please enter your decoding key as an integer: ")
+    print()
 for character in message_to_decode:
     if character in LETTERS_CAP:
         index1 = LETTERS_CAP.index(character)
@@ -78,16 +71,11 @@ print()
 password = ""
 password_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*1234567890"
 password_length = input("How many characters would you like your password to be? ")
+print()
 # Check if password is integer
-"""while pw_length_int == False:
-    if password_length.isdigit():
-        pw_length_int = True
-        print()
-    else:
-        print()
-        print("Please enter an integer for your password length.")
-        print()
-        password_length = input("How many characters would you like your password to be? ")"""
+while not password_length.isdigit():
+    password_length = input("Please enter your password length as an integer: ")
+    print()
 for p in range(int(password_length)):
     password += random.choice(password_characters)
 print("Here is your password: " + password)
