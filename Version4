@@ -1,0 +1,130 @@
+# Setup
+import random
+import pygame
+pygame.init()
+import pygame.freetype
+pygame.freetype.init
+box_color = (65, 208, 251)
+running = True
+encode = False
+decode = False
+PW = False
+
+# Pygame features
+window = pygame.display.set_mode([2000, 1000])
+window.fill((251, 124, 65))
+box1 = pygame.Rect(50, 50, 900, 400)
+pygame.draw.rect(window, box_color, box1)
+box2 = pygame.Rect(1050, 50, 900, 400)
+pygame.draw.rect(window, box_color, box2)
+box3 = pygame.Rect(550, 550, 900, 400)
+pygame.draw.rect(window, box_color, box3)
+font1 = pygame.freetype.SysFont('Times New Roman')
+font1.size = 100
+font1.render_to(window, (335, 225), "Encode")
+font2 = pygame.freetype.SysFont('Times New Roman')
+font2.size = 100
+font2.render_to(window, (1365, 225), "Decode")
+font3 = pygame.freetype.SysFont('Times New Roman')
+font3.size = 100
+font3.render_to(window, (670, 735), "Create Password") 
+pygame.display.flip()
+    
+# While loop
+while running:
+    
+# Event
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+            if 50 <= y <= 450:
+                if 50 <= x <= 950:
+                    encode = True
+                elif 1050 <= x <= 1950:
+                    decode = True
+            elif 550 <= y <= 950:
+                if 550 <= x <= 1450:
+                    PW = True
+                        
+# Encoding a message
+    while encode:
+        LETTERS_CAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        letters_lower = "abcdefghijklmnopqrstuvwxyz"
+        final_message = ""
+        message_to_encode = input("Please enter a message to encode: ")
+        print()
+        num = random.randint(1, 25)
+        for character in message_to_encode:
+            if character in LETTERS_CAP:
+                index1 = LETTERS_CAP.index(character)
+                index1 += int(num)
+                if index1 > 25:
+                    index1 -= 26
+                final_message += LETTERS_CAP[index1]
+            elif character in letters_lower:
+                index2 = letters_lower.index(character)
+                index2 += int(num)
+                if index2 > 25:
+                    index2 -= 26
+                final_message += letters_lower[index2]
+            else:
+                final_message += character
+        print("Here is your encoded message: " + final_message)
+        print()
+        print("To decode this message, you will need a key, which is a number. Here is your key: " + str(num))
+        print()
+        encode = False
+        print("Click on an option or press the quit button.")
+        print()
+        
+# Decoding a message
+    while decode:
+        LETTERS_CAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        letters_lower = "abcdefghijklmnopqrstuvwxyz"
+        final_message = ""
+        message_to_decode = input("Please enter a message to decode: ")
+        print()
+        num = input("Please enter your decoding key: ")
+        print()
+        # Check if key is integer
+        while not num.isdigit():
+            num = input("Please enter your decoding key as an integer: ")
+            print()
+        for character in message_to_decode:
+            if character in LETTERS_CAP:
+                index1 = LETTERS_CAP.index(character)
+                index1 -= int(num)
+                if index1 < 0:
+                    index1 += 26
+                final_message += LETTERS_CAP[index1]
+            elif character in letters_lower:
+                index2 = letters_lower.index(character)
+                index2 -= int(num)
+                if index2 < 0:
+                    index2 += 26
+                final_message += letters_lower[index2]
+            else:
+                final_message += character
+        print("Here is your decoded message: " + final_message)
+        print()
+        decode = False
+        print("Click on an option or press the quit button.")
+        print()
+        
+# Creating a password
+    while PW:
+        password = ""
+        password_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*1234567890"
+        password_length = input("How many characters would you like your password to be? ")
+        print()
+        # Check if password is integer
+        while not password_length.isdigit():
+            password_length = input("Please enter your password length as an integer: ")
+            print()
+        for p in range(int(password_length)):
+            password += random.choice(password_characters)
+        print("Here is your password: " + password)
+        print()
+        PW = False
+        print("Click on an option or press the quit button.")
+        print()
