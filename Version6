@@ -1,0 +1,244 @@
+# Setup
+import random
+import pygame
+pygame.init()
+import pygame.freetype
+pygame.freetype.init
+box_color = (168, 133, 238)
+font_color = (0, 0, 0)
+background_color_1 = (220, 249, 221)
+background_color_2 = (172, 172, 172)
+running = True
+encode = False
+decode = False
+PW = False
+animating1 = True
+animating2 = True
+animating3 = True
+animating4 = True
+animating5 = True
+animating6 = True
+
+# Pygame & animation setup
+font1y = 1000
+font1max = 225
+font2y = 1000
+font2max = 225
+font3y = 1000
+font3max = 735
+speed1 = -15
+speed2 = 15
+window = pygame.display.set_mode([2000, 1000])
+font4size = 20
+font4max = 400
+font5size = 20
+font5max = 400
+font6size = 20
+font6max = 300
+
+# Main loop
+print("Select an option with your mouse, or press 1 for encode, 2 for decode, and 3 for password creator. Or, click the X in the top right corner to exit.")
+print()
+while running:
+
+# Pygame features
+    while animating1 or animating2 or animating3:
+        window.fill(background_color_1)
+        box1 = pygame.Rect(50, 50, 900, 400)
+        pygame.draw.rect(window, box_color, box1)
+        box2 = pygame.Rect(1050, 50, 900, 400)
+        pygame.draw.rect(window, box_color, box2)
+        box3 = pygame.Rect(550, 550, 900, 400)
+        pygame.draw.rect(window, box_color, box3)
+        font1 = pygame.freetype.SysFont('Helvetica')
+        font1.size = 100
+        font1.fgcolor = font_color
+        font1.render_to(window, (335, font1y), "Encode")
+        font2 = pygame.freetype.SysFont('Helvetica')
+        font2.size = 100
+        font2.fgcolor = font_color
+        font2.render_to(window, (1365, font2y), "Decode")
+        font3 = pygame.freetype.SysFont('Helvetica')
+        font3.size = 100
+        font3.fgcolor = font_color
+        font3.render_to(window, (620, font3y), "Create Password")
+        pygame.display.flip()
+        if font1y <= font1max:
+            font1y = font1max
+            animating1 = False
+        else:
+            font1y += speed1
+        if font2y <= font2max:
+            font2y = font2max
+            animating2 = False
+        else:
+            font2y += speed1
+        if font3y <= font3max:
+            font3y = font3max
+            animating3 = False
+        else:
+            font3y += speed1
+            
+# Event loop
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+            if 50 <= y <= 450:
+                if 50 <= x <= 950:
+                    encode = True
+                elif 1050 <= x <= 1950:
+                    decode = True
+            elif 550 <= y <= 950:
+                if 550 <= x <= 1450:
+                    PW = True
+        elif event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                encode = True
+                animating4 = True
+            elif event.key == pygame.K_2:
+                decode = True
+                animating5 = True
+            elif event.key == pygame.K_3:
+                PW = True
+                animating6 = True
+                        
+# Encoding a message
+    while encode and running:
+        
+# Animate font
+        while animating4:
+            window.fill(background_color_2)
+            font4 = pygame.freetype.SysFont('Helvetica')
+            font4.size = font4size
+            font4.render_to(window, (300, 400), "Encode") 
+            pygame.display.flip()
+            if font4size >= font4max:
+                animating4 = False
+            else:
+                font4size += speed2
+        LETTERS_CAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        letters_lower = "abcdefghijklmnopqrstuvwxyz"
+        final_message = ""
+        message_to_encode = input("Please enter a message to encode: ")
+        print()
+        num = random.randint(1, 25)
+        for character in message_to_encode:
+            if character in LETTERS_CAP:
+                index1 = LETTERS_CAP.index(character)
+                index1 += int(num)
+                if index1 > 25:
+                    index1 -= 26
+                final_message += LETTERS_CAP[index1]
+            elif character in letters_lower:
+                index2 = letters_lower.index(character)
+                index2 += int(num)
+                if index2 > 25:
+                    index2 -= 26
+                final_message += letters_lower[index2]
+            else:
+                final_message += character
+        print("Here is your encoded message: " + final_message)
+        print()
+        print("To decode this message, you will need a key, which is a number. Here is your key: " + str(num))
+        print()
+        print("Select an option with your mouse, or press 1 for encode, 2 for decode, and 3 for password creator. Or, click the X in the top right corner to exit.")
+        print()
+        encode = False
+        font1y = 1000
+        font2y = 1000
+        font3y = 1000
+        animating1 = True
+        animating2 = True
+        animating3 = True
+        
+# Decoding a message
+    while decode and running:
+        
+# Animate font
+        while animating5:
+            window.fill(background_color_2)
+            font5 = pygame.freetype.SysFont('Helvetica')
+            font5.size = font5size
+            font5.render_to(window, (300, 400), "Decode") 
+            pygame.display.flip()
+            if font5size >= font5max:
+                animating5 = False
+            else:
+                font5size += speed2
+        LETTERS_CAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        letters_lower = "abcdefghijklmnopqrstuvwxyz"
+        final_message = ""
+        message_to_decode = input("Please enter a message to decode: ")
+        print()
+        num = input("Please enter your decoding key: ")
+        print()
+        
+# Check if key is integer
+        while not num.isdigit():
+            num = input("Please enter your decoding key as an integer: ")
+            print()
+        for character in message_to_decode:
+            if character in LETTERS_CAP:
+                index1 = LETTERS_CAP.index(character)
+                index1 -= int(num)
+                if index1 < 0:
+                    index1 += 26
+                final_message += LETTERS_CAP[index1]
+            elif character in letters_lower:
+                index2 = letters_lower.index(character)
+                index2 -= int(num)
+                if index2 < 0:
+                    index2 += 26
+                final_message += letters_lower[index2]
+            else:
+                final_message += character
+        print("Here is your decoded message: " + final_message)
+        print()
+        print("Select an option with your mouse, or press 1 for encode, 2 for decode, and 3 for password creator. Or, click the X in the top right corner to exit.")
+        print()
+        decode = False
+        font1y = 1000
+        font2y = 1000
+        font3y = 1000
+        animating1 = True
+        animating2 = True
+        animating3 = True
+        
+# Creating a password
+    while PW and running:
+        
+# Animate font
+        while animating6:
+            window.fill(background_color_2)
+            font6 = pygame.freetype.SysFont('Helvetica')
+            font6.size = font6size
+            font6.render_to(window, (300, 400), "Password") 
+            pygame.display.flip()
+            if font6size >= font6max:
+                animating6 = False
+            else:
+                font6size += speed2
+        password = ""
+        password_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*1234567890"
+        password_length = input("How many characters would you like your password to be? ")
+        print()
+        
+# Check if password is integer
+        while not password_length.isdigit():
+            password_length = input("Please enter your password length as an integer: ")
+            print()
+        for p in range(int(password_length)):
+            password += random.choice(password_characters)
+        print("Here is your password: " + password)
+        print()
+        print("Select an option with your mouse, or press 1 for encode, 2 for decode, and 3 for password creator. Or, click the X in the top right corner to exit.")
+        print()
+        PW = False
+        font1y = 1000
+        font2y = 1000
+        font3y = 1000
+        animating1 = True
+        animating2 = True
+        animating3 = True
