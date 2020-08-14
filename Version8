@@ -3,6 +3,8 @@ import random
 import pygame
 pygame.init()
 import pygame.freetype
+import time
+clock = pygame.time.Clock()
 pygame.freetype.init
 box_color = (132, 59, 98)
 font_color1 = (255, 185, 151)
@@ -19,6 +21,8 @@ animating3 = True
 animating4 = True
 animating5 = True
 animating6 = True
+forgot = False
+remember = False
 
 # Pygame & animation setup
 font1y = 1000
@@ -172,39 +176,95 @@ while running:
                 animating5 = False
             else:
                 font5size += speed2
-
+        while forgot == False and remember == False:
+            window.fill(background_color_1)
+            box4 = pygame.Rect(50, 50, 900, 500)
+            box5 = pygame.Rect(1050, 50, 900, 500)
+            pygame.draw.rect(window, box_color, box4)
+            pygame.draw.rect(window, box_color, box5)
+            font7 = pygame.freetype.SysFont('Helvetica')
+            font7.size = 70
+            font7.fgcolor = font_color1
+            font7.render_to(window, (150, 300), "I Know My Password")
+            font8 = pygame.freetype.SysFont('Helvetica')
+            font8.size = 70
+            font8.fgcolor = font_color1
+            font8.render_to(window, (1150, 300), "I Forgot My Password")
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = pygame.mouse.get_pos()
+                    if 50 <= y <= 550:
+                        if 50 <= x <= 950:
+                            remember = True
+                        elif 1050 <= x <= 1950:
+                            forgot = True
+                
 # Decrypting the inputted message
         LETTERS_CAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         letters_lower = "abcdefghijklmnopqrstuvwxyz"
-        final_message = ""
-        message_to_decode = input("Please enter a message to decode: ")
-        print()
-        num = input("Please enter your decoding key: ")
-        print()
+        final_message = ""        
+        if remember:
+            message_to_decode = input("Please enter a message to decode: ")
+            print() 
+            num = input("Please enter your decoding key: ")
+            print()
         
 # Check if key is integer
-        while not num.isdigit():
-            num = input("Please enter your decoding key as an integer: ")
+            while not num.isdigit():
+                num = input("Please enter your decoding key as an integer: ")
+                print()
+    
+# Decrypting the inputted message if remember
+            for character in message_to_decode:
+                if character in LETTERS_CAP:
+                    index1 = LETTERS_CAP.index(character)
+                    index1 -= int(num)
+                    if index1 < 0:
+                        index1 += 26
+                    final_message += LETTERS_CAP[index1]
+                elif character in letters_lower:
+                    index2 = letters_lower.index(character)
+                    index2 -= int(num)
+                    if index2 < 0:
+                        index2 += 26
+                    final_message += letters_lower[index2]
+                else:
+                    final_message += character
+            print("Here is your decoded message: " + final_message)
             print()
-
-# Decrypting the inputted message
-        for character in message_to_decode:
-            if character in LETTERS_CAP:
-                index1 = LETTERS_CAP.index(character)
-                index1 -= int(num)
-                if index1 < 0:
-                    index1 += 26
-                final_message += LETTERS_CAP[index1]
-            elif character in letters_lower:
-                index2 = letters_lower.index(character)
-                index2 -= int(num)
-                if index2 < 0:
-                    index2 += 26
-                final_message += letters_lower[index2]
-            else:
-                final_message += character
-        print("Here is your decoded message: " + final_message)
-        print()
+            remember = False
+            
+# Decrypting if forgot
+        elif forgot:
+            message_to_decode = input("Please enter a message to decode: ")
+            print()
+            decode_number = 1
+            print("One of the following will be your final message:")
+            pygame.time.wait(1000)
+            while decode_number < 26:
+                final_message = ""
+                for character in message_to_decode:
+                    if character in LETTERS_CAP:
+                        index1 = LETTERS_CAP.index(character)
+                        index1 -= decode_number
+                        if index1 < 0:
+                            index1 += 26
+                        final_message += LETTERS_CAP[index1]
+                    elif character in letters_lower:
+                        index2 = letters_lower.index(character)
+                        index2 -= decode_number
+                        if index2 < 0:
+                            index2 += 26
+                        final_message += letters_lower[index2]
+                    else:
+                        final_message += character
+                print(final_message)
+                decode_number += 1
+            print()
+            forgot = False
+                
+# Finish decode option
         print("Select an option with your mouse, or press 1 for encode, 2 for decode, and 3 for password creator. Or, click the X in the top right corner to exit.")
         print()
         decode = False
